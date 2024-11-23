@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import "./editor.css";
+import Providers from "./providers";
+import Navbar from "@/components/Navbar";
+import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
+import NextTopLoader from 'nextjs-toploader';
+import { Toaster } from "@/components/ui/sonner"
+import CreateWorkspaceModal from "@/components/CreateWorkspaceModal";
+import CreateChannelModal from "@/components/CreateChannelModal";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -24,12 +32,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <ConvexAuthNextjsServerProvider>
+      <html lang="en" suppressHydrationWarning >
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <NextTopLoader showSpinner={false} color="#2a07f0" />
+          <Providers>
+            <CreateWorkspaceModal />
+            <CreateChannelModal />
+            {/* <Navbar /> */}
+            {children}
+            <Toaster />
+          </Providers>
+        </body>
+      </html>
+    </ConvexAuthNextjsServerProvider>
   );
 }
